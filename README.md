@@ -1,329 +1,225 @@
-🛍️ Wompi-Onboarding
+🛍️ Fullstack App - Proceso de Compra con Pago (Wompi)
 
-Aplicación web de e-commerce donde un cliente puede comprar un producto usando tarjeta de crédito a través de la pasarela de pago Wompi (sandbox). El flujo completo incluye visualización del producto, captura de datos de entrega y pago, confirmación de transacción y actualización del stock.
+Este repositorio contiene la solución completa para una aplicación fullstack que permite la compra de un producto único mediante tarjeta de crédito usando la pasarela de pagos Wompi.
 
-📌 Tabla de Contenidos
-Características
+🔗 Enlaces
 
-Tecnologías
+🔥 Demo en línea: https://your-deployed-url
 
-Demo
+📦 Backend GitHub: https://github.com/usuario/backend-repo
 
-Arquitectura
+🖥️ Frontend GitHub: https://github.com/usuario/frontend-repo
 
-Modelo de Datos
+⚙️ Tecnologías Usadas
 
-Instalación Local
-
-Uso
-
-Documentación de la API
-
-Pruebas
-
-Seguridad
-
-Consideraciones
-
-Checklist de Entrega
-
-Licencia
-
-✅ Características
-✅ SPA mobile-first (iPhone SE compatible)
-
-✅ Flujo completo de pago por tarjeta
-
-✅ Persistencia del estado entre páginas y recargas
-
-✅ Actualización automática del stock
-
-✅ Validación y detección de tarjetas VISA / MasterCard
-
-✅ Arquitectura Hexagonal
-
-✅ Railway Oriented Programming (ROP)
-
-✅ API REST robusta y documentada
-
-✅ Pruebas unitarias con cobertura >80%
-
-✅ Deploy en AWS
-
-🧰 Tecnologías
 Frontend
- Vue 3 / React (indica cuál usaste)
 
- Vuex / Redux
+Vue.js 3 + Vite + TypeScript
 
- TailwindCSS / CSS Modules / Styled Components
+Vuex
 
- Vite / Webpack
+TailwindCSS
 
- Jest / Vitest
+Axios
+
+VeeValidate + Yup
+
+Vitest (cobertura > 80%)
 
 Backend
- NestJS / Grappe / Sinatra
 
- TypeORM / Prisma
+NestJS
 
- PostgreSQL / DynamoDB
+PostgreSQL con TypeORM
 
- Jest para testing
+Arquitectura Hexagonal (Ports & Adapters)
 
- Swagger para documentación
+Railway Oriented Programming (ROP)
 
-Infraestructura
- AWS S3 / CloudFront (frontend)
+Jest (cobertura > 80%)
 
- AWS EC2 / Lambda / ECS (backend)
+Swagger
 
- AWS RDS (PostgreSQL)
+DevOps
 
- HTTPS + headers de seguridad
+AWS (RDS, S3, CloudFront)
 
-🌐 Demo
-🔗 App: https://miapp.cloudfront.net
+HTTPS, headers de seguridad
 
-🔗 API: https://api.miapp.com
+GitHub Actions (CI)
 
-🔗 Repositorio: https://github.com/usuario/miapp
+📐 Modelo de Base de Datos
 
-🧠 Arquitectura
-Backend (Hexagonal)
-bash
-Copiar
-Editar
+Producto: id, nombre, descripción, precio, stock
+
+Cliente: id, nombre, correo, dirección
+
+Transacción: id, estado, monto, cliente_id, producto_id
+
+Entrega: id, dirección, estado, transaccion_id
+
+Diagrama
+
+Producto ---< Transacción >--- Cliente ---< Entrega
+
+🔄 Flujo de Negocio
+
+Mostrar producto con stock y botón de compra
+
+Formulario de tarjeta + dirección
+
+Resumen de pago (producto + tarifas)
+
+Confirmar pago
+
+Llamar backend → Wompi
+
+Mostrar resultado (éxito o error)
+
+Stock actualizado
+
+📋 Paso a Paso Backend
+
+1. Setup Inicial
+
+Proyecto creado con Nest.js + TypeScript
+
+Integración de PostgreSQL via TypeORM
+
+Arquitectura Hexagonal
+
+2. Módulos
+
+products: listar y consultar stock
+
+clients: crear cliente
+
+transactions: crear y actualizar estado
+
+deliveries: crear al completar pago
+
+3. Rutas API
+
+GET /products: obtener producto
+
+POST /clients: crear cliente
+
+POST /transactions: iniciar transacción
+
+PATCH /transactions/:id: actualizar resultado
+
+4. Conexión con Wompi
+
+Sandbox
+
+Validación de datos sensibles
+
+5. Pruebas
+
+Uso de Jest
+
+Cobertura > 80%
+
+Testeo de casos de uso, lógica de dominio y errores
+
+6. Despliegue
+
+Docker + AWS ECS + RDS PostgreSQL
+
+CI/CD con GitHub Actions
+
+HTTPS + headers de seguridad
+
+📋 Paso a Paso Frontend
+
+1. Setup Inicial
+
+Vite + Vue 3 + TypeScript
+
+TailwindCSS + Vuex + Axios + VeeValidate
+
+2. Estructura
+
 src/
-├── application/      # Casos de uso (ROP)
-├── domain/           # Entidades y lógica de dominio
-├── infrastructure/
-│   ├── controllers/
-│   ├── database/
-│   └── wompi/
-└── main.ts
-Frontend (SPA)
-css
-Copiar
-Editar
-src/
+├── assets/
 ├── components/
 ├── views/
+├── router/
 ├── store/
 ├── services/
-└── App.vue / App.jsx
-🗃️ Modelo de Datos
-mermaid
-Copiar
-Editar
-erDiagram
-    Product ||--o{ Transaction : has
-    Customer ||--o{ Transaction : makes
-    Transaction ||--|| Delivery : generates
+├── utils/
 
-    Product {
-        UUID id PK
-        string name
-        float price
-        int stock
-    }
+3. Flujo de Pantallas
 
-    Customer {
-        UUID id PK
-        string full_name
-        string email
-        string phone
-    }
+Producto: muestra info y botón de compra
 
-    Transaction {
-        UUID id PK
-        enum status
-        UUID customer_id FK
-        UUID product_id FK
-        float total_amount
-        datetime created_at
-    }
+Formulario: datos de tarjeta y envío (validados)
 
-    Delivery {
-        UUID id PK
-        string address
-        string city
-        string postal_code
-        UUID transaction_id FK
-    }
-⚙️ Instalación Local
-Requisitos
-Node.js >= 18
+Resumen: total con tarifas
 
-PostgreSQL / Docker
+Resultado: éxito o error con navegación
 
-Yarn o npm
+4. Persistencia de Datos
 
-Backend
-bash
-Copiar
-Editar
-cd backend
-cp .env.example .env
-npm install
-npm run start:dev
-Frontend
-bash
-Copiar
-Editar
-cd frontend
-npm install
-npm run dev
-📲 Uso
-El usuario ingresa a la página y ve el producto disponible.
+Vuex como fuente principal
 
-Presiona el botón “Pagar con tarjeta de crédito”.
+localStorage para resiliencia
 
-Ingresa datos de tarjeta y entrega.
+5. Validaciones
 
-Revisa resumen del pago (precio + tarifa base + envío).
+Yup: email, tarjeta, CVV, dirección
 
-Confirma el pago → Wompi responde.
+Detección de logos VISA/MasterCard
 
-El backend actualiza estado de la transacción y stock.
+6. Conexión al Backend
 
-El frontend muestra el estado final del pago.
+Axios con servicios
 
-📑 Documentación de la API
-Swagger disponible en:
-🔗 https://api.miapp.com/docs
+Flujo sincronizado:
 
-Método	Ruta	Descripción
-GET	/products	Ver productos y stock disponibles
-POST	/transactions	Crear transacción (estado: PENDING)
-POST	/wompi/webhook	Recibir callback desde Wompi
-PATCH	/transactions/:id	Actualizar estado de transacción
-POST	/deliveries	Guardar información de entrega
+Crear cliente → crear transacción → confirmar → actualizar
+
+7. Pruebas
+
+Vitest + vue-test-utils
+
+Pruebas en componentes, formularios, flujo de estados
+
+8. Despliegue
+
+AWS S3 + CloudFront
+
+vite build con .env.production
 
 🧪 Pruebas
-Frontend
-Framework: Jest / Vitest
 
-Cobertura: 85%
+Backend: Jest con cobertura > 85%
 
-Comando:
+Frontend: Vitest con cobertura > 85%
 
-bash
-Copiar
-Editar
-npm run test:coverage
-Backend
-Framework: Jest
+Reportes generados en /coverage.
 
-Cobertura: 90%
+📄 Documentación Técnica
 
-Comando:
+Swagger: https://api-url/swagger
 
-bash
-Copiar
-Editar
-npm run test:cov
-Archivos de cobertura incluidos en /coverage
+Postman Collection incluida en /docs/postman_collection.json
 
-🔐 Seguridad
-Uso de HTTPS en producción
-
-Headers de seguridad con Helmet (o NGINX)
-
-Validación de datos y sanitización
-
-Datos de tarjetas solo simulados (sandbox)
-
-Sin exposición de llaves privadas en frontend
-
-🧪 Datos de prueba para Wompi Sandbox
-Campo	Valor
-Número de tarjeta	4242 4242 4242 4242
-Nombre	Juan Pérez
-Expiración	12/28
-CVV	123
-Cédula	1234567890
-
-📋 Consideraciones
-Este proyecto fue desarrollado en el marco de una prueba técnica.
-
-No se deben compartir ni reutilizar llaves de API públicas.
-
-El nombre del repositorio no contiene “Wompi” como se especifica en la prueba.
-
-✅ Checklist de Entrega
- Flujo completo de compra y pago
-
- Frontend responsive y mobile-first
-
- Backend desacoplado (Hexagonal)
-
- Pruebas unitarias con cobertura >80%
-
- Deploy en AWS
-
- Seguridad aplicada
-
- Documentación Swagger
-
- Código limpio y mantenible
-
-📄 Licencia
-MIT License
-© 2025 - [Tu nombre o usuario de GitHub]
-
-¿Te gustaría que rellene este README exacto con tus tecnologías reales, enlaces, comandos y estructura final? Solo dime:
-
-¿Vue o React?
-
-¿Nest.js, Grappe o Sinatra?
-
-¿Tu URL de demo?
-
-¿Repo público en GitHub?
-
-¿Base de datos real que usaste?
-
-¿Cómo estructuraste tus carpetas?
-
-Y te lo dejo listo para copiar/pegar.
+✅ Checklist
 
 
 
+👨‍💻 Autor
+
+Nombre: Moises pinzon Xiques
+
+Email: mpinzon8080gmail.com
 
 
+GitHub: https://github.com/mpinzonxiqu/wompi-onboarding.git
 
+📝 Notas
 
-Dijiste:
-TODO ESO PEGO EN EL ARCHIVO READMY
+Producto precargado en la base de datos.
 
-
-ChatGPT dijo:
-¡Sí! 🔥 Todo lo que te mostré es el contenido completo y profesional que debes pegar en tu README.md para tu prueba técnica. Sin embargo, hay varios lugares donde debes reemplazar o completar con tu información real, como:
-
-🔁 Campos que debes actualizar:
-Nombre del proyecto: Cambia el título principal.
-
-URLs de producción:
-
-App frontend (https://miapp.cloudfront.net)
-
-API backend (https://api.miapp.com)
-
-Tecnologías que usaste: Marca solo las que realmente usaste ([x]).
-
-Frameworks: Elige entre Vue / React, NestJS / Grappe / Sinatra.
-
-Comandos reales de instalación y test: Ajusta si usas Yarn, pnpm, etc.
-
-Diagrama ERD: Puedes usar el que puse o reemplazarlo por uno generado con dbdiagram.io o Draw.io.
-
-Modelo de carpetas: Cambia si usaste otra estructura.
-
-Rutas y endpoints: Asegúrate de que coincidan exactamente con los de tu backend.
-
-Nombre del autor / licencia: Cambia a tu nombre o username GitHub.
-
-Checklist de entrega: Mantén solo lo que cumpliste.
-
-
+xampp - Nombre base de Datos: tienda_db
