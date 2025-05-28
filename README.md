@@ -4,11 +4,11 @@ Este repositorio contiene la solución completa para una aplicación fullstack q
 
 🔗 Enlaces
 
-🔥 Demo en línea: https://your-deployed-url
 
-📦 Backend GitHub: https://github.com/usuario/backend-repo
 
-🖥️ Frontend GitHub: https://github.com/usuario/frontend-repo
+📦 Backend GitHub: https://github.com/mpinzonxiqu/tienda-backend.git
+
+🖥️ Frontend GitHub: https://github.com/mpinzonxiqu/wompi-onboarding.git
 
 ⚙️ Tecnologías Usadas
 
